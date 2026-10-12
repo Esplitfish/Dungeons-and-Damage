@@ -1,4 +1,5 @@
 # Dungeons & Damage
+<p>Yo how do you connect a godot project to a repository 😥<p>
 <p>Originally, this was a space for me and a friend to make things during our Python 1 class at school, as we were bored out of our minds.</p>
 <p>This project was good enough that when the final project came around all I had to do was implement classes and the custom character.</p>
 <p>I don't remember the details, but I think it needed to consist of a class-based custom character creator with an inventory system.</p>
