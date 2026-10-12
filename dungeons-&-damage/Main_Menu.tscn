@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://crwy08klcwyfq"]
+
+[node name="Node2D" type="Node2D" unique_id=1757275669]
+
+[node name="Label" type="Label" parent="." unique_id=293193523]
+offset_left = 535.0
+offset_top = 72.0
+offset_right = 716.0
+offset_bottom = 95.0
+text = "Dungeons And Damage"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1000071071]
+z_index = -1
+offset_left = -132.0
+offset_top = 690.0
+offset_right = 1053.0
+offset_bottom = 1377.0
+color = Color(0.084413074, 0.0007382248, 0, 1)
