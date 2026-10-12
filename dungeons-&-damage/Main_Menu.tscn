@@ -13,8 +13,8 @@ vertical_alignment = 1
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1000071071]
 z_index = -1
-offset_left = -132.0
-offset_top = 690.0
-offset_right = 1053.0
-offset_bottom = 1377.0
+offset_left = -9.0
+offset_top = -22.0
+offset_right = 1176.0
+offset_bottom = 665.0
 color = Color(0.084413074, 0.0007382248, 0, 1)
