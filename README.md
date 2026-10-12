@@ -1,58 +1,13 @@
 # Dungeons & Damage
 <p>Yo how do you connect a godot project to a repository 😥<p>
-<p>Originally, this was a space for me and a friend to make things during our Python 1 class at school, as we were bored out of our minds.</p>
-<p>This project was good enough that when the final project came around all I had to do was implement classes and the custom character.</p>
-<p>I don't remember the details, but I think it needed to consist of a class-based custom character creator with an inventory system.</p>
-<p>Emilio had already implemented the inventory system, aka the items, and I took that and made it fit into the program to have it work for the project. I don't know if Emilio used that version as his project.</p>
-<p>Python 2 rolled around, and Emilio hadn't taken the class, so I was on my own. I learned how to make a website with Django in that class, however I've forgotten how to use it now.</p>
-<p>During my time in Python 2, I wanted to learn c++, as I had learned that's what most game devs use. At the time, I had no idea what "memory management" was, but I was ready to learn.</p>
-<p>About 2 weeks later, I was confident in my ability to use the language at the most basic level. I was not, and I'll talk about that more in the c++ release.</p>
-<p>For a while, I was still adding some new things to the Python version, but as I got deeper into the c++ wormhole, the Python version was left in the dust</p>
-<p>The Python version is still in that state, as I have decided to add visuals. I intitally just googled "easy c++ visual library".</p>
-<p>This introduced me to Raylib, and then I had a nightmare the following night where I kept failing to find and implement the best verion of it. Would that be the quickstart? The master branch?</p>
-<p>Wait, no, that actually happened.</p>
-<p>Raylib is still great, and I would reccomemd using it if you can set it up in the way you'd like.</p>
-<p></p>
-<p>Enter OpenGL, what Raylib is based in. You need like, 200 lines of code to render one orange triangle (not including everything in #include).</p>
-<p>So that's the state I'm in. The base c++ version is being worked on in school, because GitHub codespaces are availible on the school-provided laptops, but it doesn't support a $DISPLAY_ENVIROMENT, so I can't see visuals. I can still code things, but I can't see what it looks like. The OpenGL version is not being worked on, because I'm still struggling to understand what a VAO is. I think I'm getting close, though.</p>
-<p>Around Late Augest/Early September of 2025, I joined my school's robotics team. So, I learned Java for that.</p>
-<p>And now, I'm working on a Java version of this game. It's not going to be ready any time soon.</p>
-<p>Further information on each version can be found on the corrosponding branch</p>
-
-## Characters
-<p>You can play as:</p>
-
-### Knight
-<p>A man who fought valiantly and for honor for his kingdom. Now, he’s been captured and put to fight in the arena. If he wins, he will be allowed to leave.</p>
-
-### Peashooter
-<p>No one knows how he came to be. He’s a plant that shoots peas out of his mouth. Some say he was made by a witch, others, god. No one knows, not even him</p>
-
-### Mage
-<p>A traveling mage who claims to have mastered magic as a whole. People were skeptical, so he decided to go to the gladiator fight and prove that he is a master of all things arcane</p>
-
-### Rouge
-<p>The rouge was caught stealing from the King. Because of this, the King sent the rouge to fight in the gladiator fight, one that he would be attending personally. If the rouge put on a good show, he and his family would get rewarded handsomely (only the family if he dies), and if he doesn’t, he will be executed</p>
-
-### Skele
-<p>One day, a pile of bones in a prisoner cell became animated. The people in charge of the prison saw this and thought, “Hey! Why don’t we just send him into the arena if he can’t die?”</p>
-
-### Bard
-<p>The bard is a barkeep at the local bar. He serves drinks, he plays songs, and he gets to know the regulars. One day, he made a bet with someone where the loser would go fight in the arena. Needless to say, he lost the bet</p>
-
-### Barbarian
-<p>The barbarian has no identity, so we can’t really give him a proper story, but he kinda just broke in to the arena for the thrill of the fight</p>
-
-### -.- --- -. .- -- .. ....... -.-. --- -.. .
-<p>.. ... ....... .- ....... .-.. .. - . .-. .- .-.. ....... --. --- -..</p>
-<p>.- .-.. .-.. ....... --- ..-. ....... .... .. ... ....... ... - .- - ... ....... .- .-. . ....... ---.. ---.. ..--- ..--- ....- -.... ....- -.... --... ----. ----- --..-- ....... .-- .... .. -.-. .... ....... .. ... ....... - .... . ....... -.- --- -. .- -- .. ....... -.-. --- -.. . ....... --- -. ....... - .... . ....... -.- . -.-- .--. .- -..</p>
+<p>OKAY i figured out how to connect a godot project to github it kinda sucked but i got it</p>
 
 # Plans
-- [ ] First things first, the c++ version must be released
-- [ ] I also need to extensively bug test the Python version becasuse I know there's some issues
-- [ ] I want to increase the maximum number of players in some way to 4. This will end up being a 2v2 or FFA
-- [ ] A story mode. Emilio has somewhere to start on this, and a sentence or 2 has already been written about each of the characters
-- [ ] Sliced Bread or smth idk
+- [ ] Remake the game in godot
+- [ ] Get someone else to do the art for me cause i can't draw (same for music)
+- [ ] I really want to try to get online working at some point (probably another separate branch)
+- [ ] AI for single player
+- [ ] Make the game an itch page or something if I can get it to that point
 
 <p>⚔️⚔️⚔️⚔️⚔️⚔️⚔️⚔️⚔️⚔️⚔️⚔️</p>
 
