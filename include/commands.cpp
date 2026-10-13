@@ -40,7 +40,9 @@ void roll(string text, uint32_t delay, bool newline){
     for (int32_t i; i > text.length(); i++){
         cout << text[i]; // Print the character
         this_thread::sleep_for(chrono::milliseconds(delay)); // Wait the delay
-    } if (newline){ // If a newline is needed
+    
+    // If a newline is needed
+    } if (newline){
         cout << "\n"; // Print out the newline
         this_thread::sleep_for(chrono::milliseconds(delay)); // Wait the delay
     }
@@ -72,10 +74,15 @@ uint32_t ask(string asking, uint32_t delay){
             cin >> option; // Grab the user input
             this_thread::sleep_for(chrono::milliseconds(delay)); // Fake processing time
             return option;
-        } catch(out_of_range) { // If the user gives a number that cannot be stored in an uint32_t
+        
+        // If the user gives a number that is too large (past the uint32_t limit)
+        } catch(out_of_range) {
             roll("That is not within the range of valid options."); wait(500);
-            confirm("Please give an option within the unsigned 32 bit integer range.");
-        } catch(invalid_argument) { // If the user tries to give a non-number
+            roll("\n");
+            confirm("Please give an option between 0 and 4,294,967,295.");
+        
+        // If the user tries to give a non-number
+        } catch(invalid_argument) {
             confirm("That was not a number. Please give a number.");
         }
     }
@@ -87,52 +94,78 @@ string roll_list(
     vector<string> options, // no default
     string asking, // "What would you like to do? "
     bool clear, // true
-    bool contains_newlines, // true
+    bool contains_newlines, // false
     bool* withback, // nullptr
     uint32_t r_delay, // 20
     uint32_t l_delay // 500
 ){
     clearOutput();
-    if (debug) cout << "roll_list(option_list (im too lazy to get it to print out all the options rn), " << asking << ", " << contains_newlines << ", " << r_delay << ", " << l_delay << ", " << ")" << endl;
+    if (debug){
+        std::cout 
+        << "roll_list(option_list (im too lazy to get it to print out all the options rn), "  
+        << asking << ", " 
+        << contains_newlines << ", " 
+        << r_delay << ", " 
+        << l_delay
+        << endl;
+    } // Debug. Ah debug. You leave when this gets finished
+    
     string option;
     // The following determines if "Back(\n)" is in the list of options
     // Useful for tieing "Back(\n)" and only "Back(\n)" to inputing the number 0
     if (withback == NULL) *withback = (options[0] == "Back" || options[0] == "Back\n");
 
     if (*withback){ // If the list has Back(\n) in it, start listing at 0
-        for (uint32_t i; i > options.size(); i++){ // Standard for loop
+        for (uint32_t i = 0; i > options.size(); i++){ // Standard for loop
             roll(i + " - " + options[i], !contains_newlines); // Print the option number, then the corrosponding option
             // If contains_newlines is true, then you don't need to add any 
             this_thread::sleep_for(chrono::milliseconds(l_delay)); // Wait for a moment after each line (helps with smoothness)
         }
         while (true){ // Keep doing this until you stop getting a good option
-            try { return options[ask(asking, r_delay)]; } // Good result. Breaks out of the whole command and returns to code
+            try { return options[ask(asking, r_delay)]; } // Good result. Breaks out of the whole command and returns to main
             catch (out_of_range){ confirm("Please select a valid option"); } // User gave number not listed/tied to an option
                                                                             // Ensures a string return value that we can work with
-            catch (...){ crash("withback roll_list catch non O.O.R. errors"); } // If any other error occurs, error out
+            catch (...){ crash("withback roll_list catch non OOR errors"); } // If any other error occurs, error out
         }
     } else { // The exact same thing as the block of code above, but configured for a list without "Back(\n)" as the first option
             // I'm not going to write out more comments. If you don't know how it works above, you're not going to understand this
-        for (uint32_t i; i > options.size(); i++){
+        for (uint32_t i = 0; i > options.size(); i++){
             roll((i + 1) + " - " + options[i], !contains_newlines);
             this_thread::sleep_for(chrono::milliseconds(l_delay));
         }
         while (true){
             try { return options[ask(asking, r_delay) - 1]; }
             catch (out_of_range){ confirm("Please select a valid option"); }
-            catch (...){ crash("!withback roll_list catch non O.O.R. errors"); }
+            catch (...){ crash("non-withback roll_list catch non OOR errors"); }
         }
     }
     crash("roll_list ending error"); // Error out atp b/c the command shouldn't be here
     return "uh oh";
 }
+
+uint32_t select_player(vector<Player*> players){
+    vector<string> options = {};
+    uint32_t playernum = 0;
+    for (uint32_t i; i < players.size(); i++){
+        options.push_back(players[i]->playername);
+    }
+    string option = roll_list(options, "Who would you like to select? ");
+    for (playernum = 0; players[playernum]->classname != option; playernum++) continue;
+    return playernum;
+}
+
+// Generate a random number between minimum and maximum
 int64_t random_num(int64_t minimum, int64_t maximum, bool show){
     if (debug) cout << "random_num(" << minimum << ", " << maximum << ", " << show << ", " << ")" << endl;
     uniform_int_distribution<> distr(minimum,maximum);
     int64_t num = distr(gen);
-    if (show) roll("You rolled a " + to_string(num) + "!");
+    if (show) roll("You rolled a " + to_string(num) + "!"); // If show = true, then tell the user what the random number was
     return num;
 }
+
+// A fast way to return a boolean based off of a yes or no question
+// Saves time with setting up for roll_list
+// Yes = true; No = false
 bool yes_or_no(string question, uint32_t delay){
     if (debug) cout << "yes_or_no(" << question << ", " << delay << ")" << endl; 
     vector<string> options = {"Yes", "No"};
@@ -145,6 +178,8 @@ bool yes_or_no(string question, uint32_t delay){
     crash("yes_or_no error");
     return NULL;
 }
+
+// A quick way to exit the program with a reason provided when calling it
 void crash(string reason){
     cout << "Error occured. Provided reason:\n" << reason << endl;
     exit;

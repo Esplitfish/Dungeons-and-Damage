@@ -17,6 +17,12 @@ struct Effects{
     int32_t ability_cooldown;
 };
 
+struct Spell{
+    int32_t random;
+    int32_t times;
+    string type = "magic";
+};
+
 void clearOutput();
 void roll(string text, uint32_t delay = 20, bool = true);
 void wait(uint32_t time = 150);
@@ -26,16 +32,17 @@ string roll_list(
     vector<string>, // options
     string = "What would you like to do? ", // asking
     bool = true, // clear
-    bool = true, // contains_newlines
+    bool = false, // contains_newlines
     bool* = nullptr, // withback
     uint32_t = 500, // r_delay
     uint32_t = 150  // l_delay
 );
+uint32_t select_player(vector<Player*>);
 int64_t random_num(int64_t, int64_t, bool);
 bool yes_or_no(string, uint32_t = 500);
 void crash(string);
 
-// Stat Macros
+// Stat Index Macros
 #define MAX_HP (int8_t) 0
 #define ATTACK (int8_t) 1
 #define ATTACK_BONUS (int8_t) 2
@@ -45,7 +52,7 @@ void crash(string);
 #define ITEM_USES (int8_t) 6
 #define SPEED (int8_t) 7
 
-// Item Macros
+// Item Index Macros
 #define SPOON (int8_t) 0
 #define KNIVE (int8_t) 1
 #define POTION (int8_t) 2
@@ -82,6 +89,7 @@ void crash(string);
 #define MAGE_ACTIVATED (string) "I don't care how big the room is"
 #define MAGE_OPTIONS (vector<string>){""}
 #define MAGE_SPELLS (vector<string>){""}
+#define MAGE_DATA (unordered_map<string, int32_t>){ {"Ab1Cool", 7} }
 
 #define SKELE_STATS (array<int32_t, 8>){30,7,3,12,7,5,4,6}
 #define SKELE_ITEMS (array<int16_t, 5>){3,4,0,0,0}
@@ -89,6 +97,7 @@ void crash(string);
 #define SKELE_ACTIVATED (string) "Dry Bones"
 #define SKELE_OPTIONS (vector<string>){""}
 #define SKELE_SPELLS (vector<string>){""}
+#define SKELE_DATA (unordered_map<string, int32_t>){ {"Ab1Cool", 8} }
 
 #define BARD_STATS (array<int32_t, 8>){27,6,4,14,4,2,5,2}
 #define BARD_ITEMS (array<int16_t, 5>){3,2,2,1,0}
@@ -96,6 +105,7 @@ void crash(string);
 #define BARD_ACTIVATED (string) "1d4 Psychic Damage"
 #define BARD_OPTIONS (vector<string>){""}
 #define BARD_SPELLS (vector<string>){""}
+#define BARD_DATA (unordered_map<string, int32_t>){ {"Ab1Cool", 3} }
 //
 #define BARD_DEFAULT_STATS BARD_STATS
 #define BARD_OFFENSIVE_STATS (array<int32_t, 8>){20,10,4,12,5,2,3,2}
@@ -109,6 +119,7 @@ void crash(string);
 #define BARBARIAN_ACTIVATED (string) "Rage"
 #define BARBARIAN_OPTIONS (vector<string>){""}
 #define BARBARIAN_SPELLS (vector<string>){"Cast Iron"}
+#define BARBARIAN_DATA (unordered_map<string, int32_t>){ {"Ab1Cool", 7} }
 
 #define NARRATOR_STATS (array<int32_t, 8>){2^31-1,2^31-1,2^31-1,2^31-1,2^31-1,2^31-1,2^31-1,2^31-1}
 #define NARRATOR_ITEMS (array<int16_t, 5>){32767,32767,32767,32767,32767}
@@ -116,6 +127,7 @@ void crash(string);
 #define NARRATOR_ACTIVATED (string) "You must die"
 #define NARRATOR_OPTIONS (vector<string>){""}
 #define NARRATOR_SPELLS (vector<string>){""}
+#define NARRATOR_DATA (unordered_map<string, int32_t>){ {"Ab1Cool", 1} }
 
 class Player{
     public:
@@ -123,18 +135,18 @@ class Player{
     array<int16_t, 5> items;
     vector<string> options;
     vector<string> spells;
-    int32_t current_hp, current_mp;
+    int32_t current_hp, current_mp, current_itus;
     string passive;
     string activated;
     string classname;
+    string playername;
     Effects effects;
     bool dead = false;
-    Player(array<int32_t, 8>, array<int16_t, 5>, vector<string>, vector<string>, string, string);
-    Player();
+    Player(array<int32_t, 8>, array<int16_t, 5>, vector<string>, vector<string>, string, string, string, string);
     void damage(int32_t, string);
     void heal(int32_t);
     void next_turn();
-    void take_turn(Player&);
+    void take_turn(vector<Player*>);
 };
 
 #endif
