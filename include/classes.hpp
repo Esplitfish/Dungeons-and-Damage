@@ -13,6 +13,7 @@ struct Effects{
     int32_t adv;
     int32_t adtr;
     int32_t dmgBON;
+    bool fence_set;
     int32_t ability_cooldown_current;
     int32_t ability_cooldown;
 };
@@ -22,25 +23,6 @@ struct Spell{
     int32_t times;
     string type = "magic";
 };
-
-void clearOutput();
-void roll(string text, uint32_t delay = 20, bool = true);
-void wait(uint32_t time = 150);
-void confirm(string, uint32_t = 500);
-uint32_t ask(string = "What would you like to do? ", uint32_t = 500);
-string roll_list(
-    vector<string>, // options
-    string = "What would you like to do? ", // asking
-    bool = true, // clear
-    bool = false, // contains_newlines
-    bool* = nullptr, // withback
-    uint32_t = 500, // r_delay
-    uint32_t = 150  // l_delay
-);
-uint32_t select_player(vector<Player*>);
-int64_t random_num(int64_t, int64_t, bool);
-bool yes_or_no(string, uint32_t = 500);
-void crash(string);
 
 // Stat Index Macros
 #define MAX_HP (int8_t) 0
@@ -147,6 +129,26 @@ class Player{
     void heal(int32_t);
     void next_turn();
     void take_turn(vector<Player*>);
+    void instant_kill();
 };
+
+void clearOutput();
+void roll(string text, uint32_t delay = 20, bool = true);
+void wait(uint32_t time = 150);
+void confirm(string, uint32_t = 500);
+uint32_t ask(string = "What would you like to do? ", uint32_t = 500);
+string roll_list(
+    vector<string>, // options
+    string = "What would you like to do? ", // asking
+    bool = true, // clear
+    bool = false, // contains_newlines
+    bool* = nullptr, // withback
+    uint32_t = 500, // r_delay
+    uint32_t = 150  // l_delay
+);
+uint32_t select_player(vector<Player*>);
+int64_t random_num(int64_t, int64_t, bool);
+bool yes_or_no(string, uint32_t = 500);
+void crash(string);
 
 #endif

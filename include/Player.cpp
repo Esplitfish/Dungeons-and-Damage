@@ -18,6 +18,13 @@ current_hp(s[MAX_HP]), current_mp(s[MAX_MP]), current_itus(s[ITEM_USES])
 // Subtract health from the player and change dead to match being over 0HP
 void Player::damage(int32_t amount, string type){
 
+    // Check for fence
+    if (effects.fence_set){
+        roll(playername + "'s fence blocked the attack. It crumbled immediately after.");
+        wait(500);
+        effects.fence_set = false;
+        return;
+    }
     // Knights take 2 less damage, with a minimum of zero
     if (passive == KNIGHT_PASSIVE){
         if (amount < 0) amount--; // ?
@@ -33,6 +40,7 @@ void Player::damage(int32_t amount, string type){
     }
     current_hp -= amount;
     roll(playername + " took " + to_string(amount) + " points of damage!");
+    wait(500);
     dead = (current_hp <= 0);
 }
 
@@ -61,6 +69,9 @@ void Player::next_turn(){
     // Cap to maximum MP
     if (current_mp > stats[MAX_MP]) current_mp = stats[MAX_MP];
     
+    // Reset item uses
+    current_itus = stats[ITEM_USES];
+
     if (passive == BARD_PASSIVE){
 
         // If you are a Bard, select your next set of stats
@@ -190,28 +201,122 @@ void Player::take_turn(vector<Player*> players){
             "Drink Potion - " + to_string(items[POTION]),
             "Set up Fence - " + to_string(items[FENCE]),
         };
+
         if (items[DEAGLE] > 0){
             options.push_back("Shoot Deagle - " + to_string(items[DEAGLE]));
         }
+        // Tell the player how many item uses they still have
         roll(playername + " has " + to_string(current_itus) + "/" + to_string(stats[ITEM_USES]) + " item uses.");
         option = roll_list(options);
         if (option == "Back"){
             item_correct = false;
             break;
-        } else {
+        } else if (current_itus <= 0){
+            confirm("You are out of item uses");
+            item_correct = false;
+            break;
+        }
+        else {
             if (option == "Throw Spoon - " + to_string(items[SPOON])){
-                if (items[SPOON] > 0){
-                    int64_t tetanus_user = random_num(1, 1000, false);
-                    int64_t tetanus_reciever = random_num(1, 1000, false);
-                    I_option = select_player(players);
-                    
-                } else {
+                if (items[SPOON] <= 0){
                     confirm("You don't have any of those");
                     item_correct = true;
                     continue;
                 }
+                items[SPOON]--;
+                current_itus--;
+                int64_t tetanus_user = random_num(1, 1000, false);
+                int64_t tetanus_reciever = random_num(1, 1000, false);
+                I_option = select_player(players);
+                confirm(playername + " threw a rusty spoon at " + players[I_option]->playername);
+                if (tetanus_user == 1 && tetanus_reciever == 1){
+                    confirm(
+                        "While throwing the spoon, the spoon managed to dig itself into an open wound. This caused "
+                        + playername
+                        + " to contract tetanus. They died on the spot"
+                    );
+                    instant_kill();
+                    confirm(
+                        "However, the spoon still hit "
+                        + players[I_option]->playername +
+                        ", causing a cut from the spoon. This inevitably caused them to also contract tetanus, crumpling to the ground and also dying on the spot"
+                    );
+                    players[I_option]->instant_kill();
+                    return;
+                } else if (tetanus_user == 1){
+                    confirm(
+                        "While throwing the spoon, the spoon managed to dig itself into an open wound. This caused "
+                        + playername
+                        + " to contract tetanus. They died on the spot"
+                    );
+                    instant_kill();
+                    return;
+                } else if (tetanus_reciever == 1){
+                    confirm(
+                        "Upon being hit by the spoon, it dug itself into "
+                        + players[I_option]->playername
+                        + ", depositing rust into their body. This quickly led to them contracting tetanus, ultimately killing them very quickly"
+                    );
+                    players[I_option]->instant_kill();
+                    return;
+                } else {
+                    wait(500);
+                    players[I_option]->damage(1, "Basic");
+                    wait(500);
+                    if (players[I_option]->dead) return;
+                }
+            
+            } else if (option == "Throw Knife - " + items[KNIVE]){
+                if (items[KNIVE] <= 0){
+                    confirm("You don't have any of those");
+                    item_correct = true;
+                    continue;
+                }
+                items[KNIVE]--;
+                current_itus--;
+                uint64_t hurt = random_num(1, 5, false);
+                uint64_t miss = random_num(1, 10, false);
+                I_option = select_player(players);
+                if (miss == 1){
+                    roll(playername + " missed the throwing knife");
+                    wait(500);
+                } else {
+                    players[I_option]->damage(hurt, "Basic");
+                }
+                if (players[I_option]->dead) return;
+            } else if (option == "Drink Potion - " + items[POTION]){
+                if (items[POTION] <= 0){
+                    confirm("You don't have any of those");
+                    item_correct = true;
+                    continue;
+                }
+                items[POTION]--;
+                current_itus--;
+                heal(stats[MAX_HP] / 10);
+            } else if (option == "Set up Fence - " + items[FENCE]){
+                if (items[FENCE] <= 0){
+                    confirm("You don't have any of those. I feel like you would know if you had an entire chain link fence.");
+                    item_correct = true;
+                    continue;
+                }
+                if (effects.fence_set){
+                    confirm("You already have one set up.");
+                    item_correct = true;
+                    continue;
+                }
+                items[FENCE]--;
+                current_itus--;
+                effects.fence_set = true;
+                confirm(playername + " set up a chain link fence");
+            } else if (option == "Shoot Deagle - " + items[DEAGLE]){
+                
             }
         }}
     }}
     return;
+}
+
+void Player::instant_kill(){
+    current_hp = 0;
+    dead = true;
 }

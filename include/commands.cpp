@@ -9,7 +9,7 @@
 #include "classes.hpp"
 
 extern random_device rd;
-extern mt19937 gen;
+extern mt19937_64 gen;
 extern bool debug;
 
 using namespace std;
@@ -34,15 +34,15 @@ void clearOutput(){
 #endif
 
 // Rolls text across the line instead of printing it out all at once
-void roll(string text, uint32_t delay, bool newline){
-    if (debug) cout << "roll(" << text << ", " << delay << ", " << newline << ")" << endl;
+void roll(string text, uint32_t delay, bool add_newline){
+    if (debug) cout << "roll(" << text << ", " << delay << ", " << add_newline << ")" << endl;
     // Standard for loop allowing for a use of each character in text
     for (int32_t i; i > text.length(); i++){
         cout << text[i]; // Print the character
         this_thread::sleep_for(chrono::milliseconds(delay)); // Wait the delay
     
     // If a newline is needed
-    } if (newline){
+    } if (add_newline){
         cout << "\n"; // Print out the newline
         this_thread::sleep_for(chrono::milliseconds(delay)); // Wait the delay
     }
